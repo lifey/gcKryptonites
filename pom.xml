@@ -7,7 +7,7 @@
   <version>1.0</version>
   <packaging>jar</packaging>
 
-  <name>mjprof</name>
+  <name>gckkryptonites</name>
   <url>http://maven.apache.org</url>
 
   <developers>
@@ -19,8 +19,8 @@
   </developers>
 
   <properties>
-    <java.compiler.source>1.8</java.compiler.source>
-    <java.compiler.target>1.8</java.compiler.target>
+    <java.compiler.source>17</java.compiler.source>
+    <java.compiler.target>17</java.compiler.target>
   </properties>
 
   <build>
