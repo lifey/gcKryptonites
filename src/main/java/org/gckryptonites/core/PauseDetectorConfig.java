@@ -1,4 +1,4 @@
 package org.gckryptonites.core;
 
-public record PauseDetectorConfig(long wakeupIntervalMs, long jitterThreshold, long awefulJitterThreshold) {
+public record PauseDetectorConfig(long wakeupIntervalMs, long jitterThreshold, long awfulJitterThreshold) {
 }

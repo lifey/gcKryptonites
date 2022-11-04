@@ -1,24 +1,24 @@
 package org.gckryptonites.core;
 
+import org.gckryptonites.anomalies.BrutalAllocator;
+
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
+
 public abstract class Worker implements Runnable{
+  static Logger logger = Logger.getLogger(Worker.class.getName());
   private final String name;
   private final String instanceId;
   protected volatile boolean doRun = true;
-  private static volatile int nextInstanceId = 1;
-
-  public void setRunningThread(Thread runningThread) {
-    this.runningThread = runningThread;
-  }
-
-  Thread runningThread;
+  private static AtomicInteger nextInstanceId = new AtomicInteger(1);
 
   public Worker(String name, String instanceId) {
     this.name = name;
     this.instanceId = instanceId;
-    nextInstanceId++;
+    nextInstanceId.incrementAndGet();
   }
   public Worker(String name) {
-    this(name, Integer.toString(nextInstanceId));
+    this(name, Integer.toString(nextInstanceId.get()));
   }
 
   public String getName() {
@@ -31,22 +31,21 @@ public abstract class Worker implements Runnable{
 
   public void terminate() {
     doRun = false;
-    if (runningThread != null) {
-      runningThread.interrupt();
-    }
   }
-  protected void init() {}
+  protected void onInit() {}
+  protected void onShutdown() {}
   protected  void runIteration() {
     try {
       Thread.sleep(100000);
     } catch (InterruptedException e) {
-      throw new RuntimeException(e);
+      logger.info("Shutting down");
     }
   }
   public void run() {
-    init();
+    onInit();
     while (doRun) {
       runIteration();
     }
+    onShutdown();
   }
 }

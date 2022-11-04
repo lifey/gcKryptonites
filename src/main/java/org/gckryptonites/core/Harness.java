@@ -6,13 +6,31 @@ import org.gckryptonites.config.BrutalAllocatorConfig;
 import org.gckryptonites.config.MainConfig;
 import org.gckryptonites.config.StateHolderConfig;
 
+import java.util.HashMap;
+
 public class Harness {
-  public static void mount(Worker r) {
-    Thread t = new Thread(r);
-    t.setName(r.getName()+"_" + r.getInstanceId());
+  private static final HashMap<Worker, Thread> mounts = new HashMap<>();
+
+  public static void mount(Worker worker) {
+    var t = new Thread(worker);
+    t.setName(worker.getName() + "_" + worker.getInstanceId());
     t.setDaemon(true);
-    r.setRunningThread(t); //needed for interruption
+    mounts.put(worker, t);
     t.start();
+  }
+
+  public static void shutdown() {
+    for (var worker : mounts.keySet()) {
+      worker.terminate();
+      mounts.get(worker).interrupt();
+    }
+    for (Worker worker : mounts.keySet()) {
+      try {
+        mounts.get(worker).join(3000);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+    }
   }
 
   public static void mount(MainConfig config) {

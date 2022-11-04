@@ -1,8 +1,6 @@
 package org.gckryptonites.core;
 
 import org.gckryptonites.anomalies.BrutalAllocator;
-
-import java.io.PrintStream;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -14,14 +12,14 @@ public class PauseDetector extends Worker {
   static Logger logger = Logger.getLogger(BrutalAllocator.class.getName());
   public volatile Long lastSleepTimeObj;
   private int countLowPauseBreaches = 0;
-  private int countAwefulPauseBreaches = 0;
+  private int countAwfulPauseBreaches = 0;
   PauseDetectorConfig config;
 
   public PauseDetector(PauseDetectorConfig config) {
     super("PauseDetector");
     this.config = config;
   }
-
+  @Override
   public void runIteration() {
     long beforeSleepTime = System.nanoTime();
     try {
@@ -39,19 +37,18 @@ public class PauseDetector extends Worker {
           (jitter) / 1000 / 1000 + " ms pause");
 
     }
-    if (jitter > config.awefulJitterThreshold() * 1000 * 1000) {
-      countAwefulPauseBreaches++;
-      logger.info("["+Thread.currentThread().getName()+ "] [" + new Date() + "] " + countAwefulPauseBreaches + " Aweful Pause breach detected," +
+    if (jitter > config.awfulJitterThreshold() * 1000 * 1000) {
+      countAwfulPauseBreaches++;
+      logger.info("["+Thread.currentThread().getName()+ "] [" + new Date() + "] " + countAwfulPauseBreaches + " Awful Pause breach detected," +
           (jitter) / 1000 / 1000 + " ms pause");
 
     }
   }
 
-  public int getCountLowPauseBreaches() {
-    return countLowPauseBreaches;
-  }
+  @Override
+  protected void onShutdown() {
+    logger.info("Number of JVM pauses to breach 10 ms deadline is "+ countLowPauseBreaches);
+    logger.info("Number of JVM pauses to breach 100 ms deadline is "+ countAwfulPauseBreaches);
 
-  public int getCountAwefulPauseBreaches() {
-    return countAwefulPauseBreaches;
   }
 }

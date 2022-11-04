@@ -16,8 +16,8 @@ public class Fragmenter extends Worker {
     this.config = config;
   }
 
-
-  public void init() {
+  @Override
+  public void onInit() {
     Object[] fragments = new Object[config.arrayLen()];
     for (int i = 0; i < config.arrayLen(); i++) {
       int sz = config.maxSize();

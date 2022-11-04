@@ -6,19 +6,17 @@ import org.gckryptonites.config.StateHolderConfig;
 import org.gckryptonites.core.Harness;
 import org.gckryptonites.core.PauseDetectorConfig;
 
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class Main {
   static Logger logger = Logger.getLogger(Main.class.getName());
+
   public static void main(String[] args) throws InterruptedException {
     logger.info("Lets start");
     MainConfig config = config1();
     Harness.mount(config);
-
-    stopAfter(120);
-    //  System.out.println("Number of JVM pauses to breach 10 ms deadline is "+ detector.getCountLowPauseBreaches());
-    //  System.out.println("Number of JVM pauses to breach 100 ms deadline is "+ detector.getCountAwefulPauseBreaches());
+    stopAfter(10);
+    Harness.shutdown();
   }
 
   private static MainConfig config1() {
@@ -30,9 +28,6 @@ public class Main {
   }
 
   private static void stopAfter(int seconds) throws InterruptedException {
-    long start = System.currentTimeMillis();
-    while (System.currentTimeMillis() - start < seconds * 1000) {
-      Thread.sleep(1000);
-    }
+    Thread.sleep(seconds * 1000);
   }
 }
