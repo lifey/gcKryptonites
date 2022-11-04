@@ -1,11 +1,12 @@
 package org.gckryptonites.anomalies;
 
 import org.gckryptonites.core.AClassWith16Bytes;
+import org.gckryptonites.core.Mount;
 
 import java.io.PrintStream;
 import java.util.Random;
 
-public class BrutalAllocator extends Thread {
+public class BrutalAllocator extends Mount {
   private int arrayLen;
 
   private Random generator = new Random(1);
@@ -15,12 +16,12 @@ public class BrutalAllocator extends Thread {
   private int ptr = 0;
 
   public BrutalAllocator(int arrayLen, int MBperSec, PrintStream reportStream) {
+    super("BrutalAllocator");
     this.arrayLen = arrayLen;
     arrOfObjs = new AClassWith16Bytes[arrayLen];
     this.MBperSec = MBperSec;
     this.reportStream = reportStream;
-    this.setDaemon(true);
-    this.setName("BrutalAllocator");
+
   }
 
   short progress(short val) {
@@ -37,7 +38,7 @@ public class BrutalAllocator extends Thread {
 
     int iteration = 1;
     int sumMs = 0;
-    while (true) {
+    while (doRun) {
       short val = 0;
       int total = 0;
       long start = System.currentTimeMillis();

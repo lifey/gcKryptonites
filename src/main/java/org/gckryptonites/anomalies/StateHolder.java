@@ -1,11 +1,12 @@
 package org.gckryptonites.anomalies;
 
 import org.gckryptonites.core.AClassWith16Bytes;
+import org.gckryptonites.core.Mount;
 
 import java.io.PrintStream;
 import java.util.Random;
 
-public class StateHolder extends Thread {
+public class StateHolder extends Mount {
   private int arrayLen;
 
   private Random generator = new Random();
@@ -15,12 +16,12 @@ public class StateHolder extends Thread {
   private int ptr = 0;
 
   public StateHolder(int MBOfState, PrintStream reportStream) {
+    super("StateHolder "+ MBOfState +"MB");
     this.arrayLen = MBOfState * (1024*1024 /20 ) ;
     arrOfObjs = new AClassWith16Bytes[arrayLen];
     this.MBperSec = MBperSec;
     this.reportStream = reportStream;
-    this.setDaemon(true);
-    this.setName("StateHolder "+ MBOfState +"MB");
+
   }
 
   short progress(short val) {
@@ -47,7 +48,7 @@ public class StateHolder extends Thread {
     }
     long iterTook = System.currentTimeMillis() - start;
     System.out.println("state finished allocation of state " + total + " in " + iterTook + "ms");
-    while (true) {
+    while (doRun) {
       try {
         Thread.sleep(1000 );
       } catch (InterruptedException e) {
