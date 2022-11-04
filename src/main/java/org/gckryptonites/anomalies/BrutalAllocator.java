@@ -2,27 +2,25 @@ package org.gckryptonites.anomalies;
 
 import org.gckryptonites.config.BrutalAllocatorConfig;
 import org.gckryptonites.core.AClassWith16Bytes;
-import org.gckryptonites.core.Mount;
+import org.gckryptonites.core.Worker;
 
 import java.io.PrintStream;
 import java.util.Random;
 
-public class BrutalAllocator extends Mount {
+public class BrutalAllocator extends Worker {
 
 
-  private Random generator = new Random(1);
-  private final PrintStream reportStream;
-  private volatile AClassWith16Bytes[] arrOfObjs;
+  private final Random generator = new Random(1);
+  private final AClassWith16Bytes[] arrOfObjs;
 
   private int ptr = 0;
-  private BrutalAllocatorConfig config;
+  private final BrutalAllocatorConfig config;
 
   public BrutalAllocator(BrutalAllocatorConfig config, PrintStream reportStream) {
     super("BrutalAllocator");
     this.config = config;
 
     arrOfObjs = new AClassWith16Bytes[config.arrayLen()];
-    this.reportStream = reportStream;
 
   }
 

@@ -2,27 +2,24 @@ package org.gckryptonites.anomalies;
 
 import org.gckryptonites.config.StateHolderConfig;
 import org.gckryptonites.core.AClassWith16Bytes;
-import org.gckryptonites.core.Mount;
+import org.gckryptonites.core.Worker;
 
 import java.io.PrintStream;
 import java.util.Random;
 
-public class StateHolder extends Mount {
-  private int arrayLen;
-
-  private Random generator = new Random();
+public class StateHolder extends Worker {
+  private final Random generator = new Random();
   private final PrintStream reportStream;
-  private volatile AClassWith16Bytes[] arrOfObjs;
+  private final AClassWith16Bytes[] arrOfObjs;
 
   private StateHolderConfig config;
   private int ptr = 0;
 
   public StateHolder(StateHolderConfig config, PrintStream reportStream) {
     super("StateHolder "+ config.MBOfState() +"MB");
-    this.arrayLen = config.MBOfState() * (1024*1024 /20 ) ;
+    int arrayLen = config.MBOfState() * (1024*1024 /20 ) ;
     arrOfObjs = new AClassWith16Bytes[arrayLen];
     this.reportStream = reportStream;
-
   }
 
   short progress(short val) {

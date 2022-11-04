@@ -1,14 +1,14 @@
 package org.gckryptonites.anomalies;
 
 import org.gckryptonites.config.FragmenterConfig;
-import org.gckryptonites.core.Mount;
+import org.gckryptonites.core.Worker;
 
 import java.io.PrintStream;
 import java.util.Random;
 
-public class Fragmenter extends Mount {
+public class Fragmenter extends Worker {
 
-  private Random generator = new Random();
+  private final Random generator = new Random();
   private final PrintStream reportStream;
   FragmenterConfig config;
   public Fragmenter(FragmenterConfig config, PrintStream reportStream) {

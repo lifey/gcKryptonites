@@ -7,7 +7,7 @@ import java.util.Date;
  * Inspired by Gil Tene's jHiccup
  **/
 
-public class PauseDetector extends Mount {
+public class PauseDetector extends Worker {
 
 
 
@@ -33,7 +33,7 @@ public class PauseDetector extends Mount {
       long beforeSleepTime = System.nanoTime();
       try {
         Thread.sleep(config.wakeupIntervalMs());
-        lastSleepTimeObj = Long.valueOf(beforeSleepTime); // Allocate an object to make sure potential allocation stalls are measured.
+        lastSleepTimeObj = beforeSleepTime; // Allocate an object to make sure potential allocation stalls are measured.
       } catch (InterruptedException e) {
         throw  new RuntimeException(e);
       }

@@ -1,17 +1,17 @@
 package org.gckryptonites.core;
 
-public abstract class Mount implements Runnable{
-  private String name;
-  private String instanceId;
+public abstract class Worker implements Runnable{
+  private final String name;
+  private final String instanceId;
   protected volatile boolean doRun = true;
   private static volatile int nextInstanceId = 1 ;
 
-  public Mount(String name, String instanceId) {
+  public Worker(String name, String instanceId) {
     this.name = name;
     this.instanceId = instanceId;
     nextInstanceId++;
   }
-  public Mount(String name) {
+  public Worker(String name) {
     this(name, Integer.toString(nextInstanceId));
   }
 
@@ -26,12 +26,5 @@ public abstract class Mount implements Runnable{
 
   public void terminate() {
     doRun = false;
-  }
-
-  public static Thread mount(Mount r) {
-    Thread t = new Thread(r.getName()+"_" + r.getInstanceId());
-    t.setDaemon(true);
-    t.start();
-    return t;
   }
 }
