@@ -17,7 +17,7 @@ public class PauseDetector extends Worker {
   private int countAwefulPauseBreaches = 0;
   PauseDetectorConfig config;
 
-  public PauseDetector(PauseDetectorConfig config, PrintStream reportStream) {
+  public PauseDetector(PauseDetectorConfig config) {
     super("PauseDetector");
     this.config = config;
   }
