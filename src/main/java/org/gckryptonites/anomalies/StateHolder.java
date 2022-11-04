@@ -1,5 +1,6 @@
 package org.gckryptonites.anomalies;
 
+import org.gckryptonites.config.StateHolderConfig;
 import org.gckryptonites.core.AClassWith16Bytes;
 import org.gckryptonites.core.Mount;
 
@@ -12,14 +13,14 @@ public class StateHolder extends Mount {
   private Random generator = new Random();
   private final PrintStream reportStream;
   private volatile AClassWith16Bytes[] arrOfObjs;
-  int MBperSec;
+
+  private StateHolderConfig config;
   private int ptr = 0;
 
-  public StateHolder(int MBOfState, PrintStream reportStream) {
-    super("StateHolder "+ MBOfState +"MB");
-    this.arrayLen = MBOfState * (1024*1024 /20 ) ;
+  public StateHolder(StateHolderConfig config, PrintStream reportStream) {
+    super("StateHolder "+ config.MBOfState() +"MB");
+    this.arrayLen = config.MBOfState() * (1024*1024 /20 ) ;
     arrOfObjs = new AClassWith16Bytes[arrayLen];
-    this.MBperSec = MBperSec;
     this.reportStream = reportStream;
 
   }
