@@ -11,6 +11,7 @@ public class Harness {
     Thread t = new Thread(r);
     t.setName(r.getName()+"_" + r.getInstanceId());
     t.setDaemon(true);
+    r.setRunningThread(t); //needed for interruption
     t.start();
     return t;
   }
@@ -18,10 +19,10 @@ public class Harness {
   public static void mount(MainConfig config) {
     mount(new PauseDetector(config.detectorConfig(),System.err));
     for (StateHolderConfig c : config.holderConfigs()) {
-      mount(new StateHolder(c,System.err));
+      mount(new StateHolder(c));
     }
     for (BrutalAllocatorConfig c : config.brutalConfigs()) {
-      mount(new BrutalAllocator(c,System.err));
+      mount(new BrutalAllocator(c));
     }
 
   }

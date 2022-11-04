@@ -1,14 +1,16 @@
 package org.gckryptonites.anomalies;
 
+import org.gckryptonites.Main;
 import org.gckryptonites.config.BrutalAllocatorConfig;
 import org.gckryptonites.core.AClassWith16Bytes;
 import org.gckryptonites.core.Worker;
 
 import java.io.PrintStream;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class BrutalAllocator extends Worker {
-
+  static Logger logger = Logger.getLogger(BrutalAllocator.class.getName());
 
   private final Random generator = new Random(1);
   private final AClassWith16Bytes[] arrOfObjs;
@@ -16,7 +18,7 @@ public class BrutalAllocator extends Worker {
   private int ptr = 0;
   private final BrutalAllocatorConfig config;
 
-  public BrutalAllocator(BrutalAllocatorConfig config, PrintStream reportStream) {
+  public BrutalAllocator(BrutalAllocatorConfig config) {
     super("BrutalAllocator");
     this.config = config;
 
@@ -34,32 +36,35 @@ public class BrutalAllocator extends Worker {
     return myVal;
   }
 
-  public void run() {
+  private int iteration;
+  private int sumMs;
 
-    int iteration = 1;
-    int sumMs = 0;
-    while (doRun) {
-      short val = 0;
-      int total = 0;
-      long start = System.currentTimeMillis();
-      while (total * 16 < config.MBperSec() * 1024 * 1024) {
-        for (int i = 0; i < 1000; i++) {
-          val = progress(val);
-          total++;
-        }
-      }
-      long iterTook = System.currentTimeMillis() - start;
-      sumMs += iterTook;
-      System.out.println("finished allocation of "+ total + " in " + iterTook + "ms (avg" + sumMs/iteration +" ms)" );
-      iteration++;
-      if (iterTook < 1000) {
-        try {
-          Thread.sleep(1000 - iterTook);
-        } catch (InterruptedException e) {
-          throw new RuntimeException(e);
-        }
+  public void init() {
+    iteration = 1;
+    sumMs = 0;
+  }
+
+  public void runIteration() {
+    short val = 0;
+    int total = 0;
+    long start = System.currentTimeMillis();
+    while (total * 16 < config.MBperSec() * 1024 * 1024) {
+      for (int i = 0; i < 1000; i++) {
+        val = progress(val);
+        total++;
       }
     }
 
+    long iterTook = System.currentTimeMillis() - start;
+    sumMs += iterTook;
+    logger.info("["+Thread.currentThread().getName()+ "] finished allocation of " + total + " in " + iterTook + "ms (avg" + sumMs / iteration + " ms)");
+    iteration++;
+    if (iterTook < 1000) {
+      try {
+        Thread.sleep(1000 - iterTook);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+    }
   }
 }

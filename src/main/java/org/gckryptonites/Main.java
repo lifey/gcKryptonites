@@ -1,18 +1,18 @@
 package org.gckryptonites;
 
-
 import org.gckryptonites.config.BrutalAllocatorConfig;
 import org.gckryptonites.config.MainConfig;
 import org.gckryptonites.config.StateHolderConfig;
 import org.gckryptonites.core.Harness;
 import org.gckryptonites.core.PauseDetectorConfig;
 
-/**
- * @author lifey
- * @since 2019-03-16.
- **/
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
 public class Main {
+  static Logger logger = Logger.getLogger(Main.class.getName());
   public static void main(String[] args) throws InterruptedException {
+    logger.info("Lets start");
     MainConfig config = config1();
     Harness.mount(config);
 
