@@ -2,11 +2,9 @@ package org.gckryptonites.core;
 
 import org.gckryptonites.anomalies.BrutalAllocator;
 import org.gckryptonites.anomalies.StateHolder;
-import org.gckryptonites.config.BrutalAllocatorConfig;
 import org.gckryptonites.config.MainConfig;
-import org.gckryptonites.config.StateHolderConfig;
-
 import java.util.HashMap;
+import static java.util.Arrays.*;
 
 public class Harness {
   private static final HashMap<Worker, Thread> mounts = new HashMap<>();
@@ -20,27 +18,27 @@ public class Harness {
   }
 
   public static void shutdown() {
-    for (var worker : mounts.keySet()) {
+    mounts.keySet().forEach(worker -> {
       worker.terminate();
       mounts.get(worker).interrupt();
-    }
-    for (Worker worker : mounts.keySet()) {
+    });
+    mounts.keySet().forEach(worker -> {
       try {
         mounts.get(worker).join(3000);
       } catch (InterruptedException e) {
         throw new RuntimeException(e);
       }
-    }
+    });
   }
 
   public static void mount(MainConfig config) {
     mount(new PauseDetector(config.detectorConfig()));
-    for (StateHolderConfig c : config.holderConfigs()) {
-      mount(new StateHolder(c));
-    }
-    for (BrutalAllocatorConfig c : config.brutalConfigs()) {
-      mount(new BrutalAllocator(c));
-    }
+    stream(config.holderConfigs())
+        .map(StateHolder::new)
+        .forEach(Harness::mount);
+    stream(config.brutalConfigs())
+        .map(BrutalAllocator::new)
+        .forEach(Harness::mount);
 
   }
 }

@@ -12,11 +12,12 @@ public class StateHolder extends Worker {
   private final AClassWith16Bytes[] arrOfObjects;
   static Logger logger = Logger.getLogger(BrutalAllocator.class.getName());
 
-  private StateHolderConfig config;
+  private final StateHolderConfig config;
   private int ptr = 0;
 
   public StateHolder(StateHolderConfig config) {
     super("StateHolder " + config.MBOfState() + "MB");
+    this.config = config;
     int arrayLen = config.MBOfState() * (1024 * 1024 / 20);
     arrOfObjects = new AClassWith16Bytes[arrayLen];
 
@@ -31,6 +32,7 @@ public class StateHolder extends Worker {
     ptr++;
     return myVal;
   }
+
   @Override
   public void onInit() {
     short val = 0;

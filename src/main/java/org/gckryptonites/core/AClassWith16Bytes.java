@@ -20,6 +20,4 @@ public class AClassWith16Bytes {
   public void setInternalValue(short internalValue) {
     this.internalValue = internalValue;
   }
-
-
 }

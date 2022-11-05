@@ -1,7 +1,5 @@
 package org.gckryptonites.core;
 
-import org.gckryptonites.anomalies.BrutalAllocator;
-
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
@@ -10,7 +8,7 @@ public abstract class Worker implements Runnable{
   private final String name;
   private final String instanceId;
   protected volatile boolean doRun = true;
-  private static AtomicInteger nextInstanceId = new AtomicInteger(1);
+  private static final AtomicInteger nextInstanceId = new AtomicInteger(1);
 
   public Worker(String name, String instanceId) {
     this.name = name;
