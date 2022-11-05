@@ -26,7 +26,8 @@ public class PauseDetector extends Worker {
       Thread.sleep(config.wakeupIntervalMs());
       lastSleepTimeObj = beforeSleepTime; // Allocate an object to make sure potential allocation stalls are measured.
     } catch (InterruptedException e) {
-      throw new RuntimeException(e);
+      logger.info("sleep interrupted,probably shutdown this measurement is invalid");
+      return;
     }
 
     long currentTime = System.nanoTime();

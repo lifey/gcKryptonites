@@ -63,7 +63,7 @@ public class BrutalAllocator extends Worker {
       try {
         Thread.sleep(1000 - iterationTook);
       } catch (InterruptedException e) {
-        logger.info("Shutting down");
+        logger.info("sleep interrupted Shutting down");
       }
     }
   }
