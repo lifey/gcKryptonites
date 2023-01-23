@@ -1,0 +1,15 @@
+detectorCOnfig:
+  wakeupIntervalMs: 10
+  jitterThreshold: 10
+  awfulJitterThreshold: 100
+
+holderConfigs:
+  -
+    MBOfState: 2000
+brutalConfigs:
+  -
+    MBperSec: 500
+    arrayLen: 2000
+  -
+    MBperSec: 500
+    arrayLen: 2000
