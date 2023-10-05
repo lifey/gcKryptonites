@@ -11,7 +11,7 @@ public class Fragmenter extends Worker {
   FragmenterConfig config;
   static Logger logger = Logger.getLogger(Fragmenter.class.getName());
 
-  public Fragmenter(FragmenterConfig config, PrintStream reportStream) {
+  public Fragmenter(FragmenterConfig config) {
     super("Heap Fragmenter");
     this.config = config;
   }
@@ -26,9 +26,15 @@ public class Fragmenter extends Worker {
     }
     logger.info("["+Thread.currentThread().getName()+ "] done allocating");
 
+
     for (int i = 0; i < config.arrayLen(); i++) {
       if (i % config.keepEvery() != 0)
         fragments[i] = null;
+    }
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
     byte[] a = new byte[10048 * 1024];
     logger.info("["+Thread.currentThread().getName()+ "] done nullifying");
